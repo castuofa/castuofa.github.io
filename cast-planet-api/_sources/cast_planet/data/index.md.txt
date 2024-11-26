@@ -1,0 +1,52 @@
+# DataAPI
+Wrapper class for interacting with the Planet Data API. Provides methods for searching, retrieving, and managing items, item assets, and item types.
+
+See the Planet Data API documentation for more details: https://developers.planet.com/docs/apis/data/
+
+## Example usage
+```python
+from cast_planet import DataAPI
+
+api = DataAPI(api_key='your api key here')
+```
+## Filters
+Users can use a combination of filters to search for data using the DataAPI
+'quick_search' method. Below are all the available filter options.
+
+### Asset
+```{eval-rst}
+.. autopydantic_model:: cast_planet.data.filters.AssetFilter
+```
+### Field
+```{eval-rst}
+.. automodule:: cast_planet.data.filters.field
+    :members:
+    :exclude-members: BaseFieldFilter
+```
+
+### Logical
+```{eval-rst}
+.. autopydantic_model:: cast_planet.data.filters.AndFilter
+    :inherited-members: LogicFilter
+.. autopydantic_model:: cast_planet.data.filters.NotFilter
+.. autopydantic_model:: cast_planet.data.filters.OrFilter
+    :inherited-members: LogicFilter
+```
+
+### Permission
+```{eval-rst}
+.. autopydantic_model:: cast_planet.data.filters.PermissionFilter
+```
+
+## API reference
+```{eval-rst}
+DataAPI
+=======
+.. autoclass:: cast_planet.DataAPI
+    :members:
+
+Models
+======
+.. automodule:: cast_planet.data.models
+    :members:
+```

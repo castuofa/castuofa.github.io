@@ -1,0 +1,52 @@
+# CAST Planet Python API
+The CAST Planet python API is a wrapper for the [Planet Rest API](https://developers.planet.com/docs/apis/). 
+Currently, the API allows for interfacing with the [Data](https://developers.planet.com/docs/apis/data/), 
+[Basemaps](https://developers.planet.com/docs/basemaps/), and portions of the 
+[Orders](https://developers.planet.com/apis/orders/) APIs 
+
+## Installation
+To install the package please contact Hayley at hhames@uark.edu to get a copy of 
+the current package and save it on your machine. Then, use the following to install it on your local environment.
+
+```
+pip install path/to/file/cast_planet_api-0.1.0-py3-none-any.whl
+```
+
+## Usage 
+Below is a simple use case for fetching item types, to see more use cases, please view 
+the documentation for the individual modules. 
+
+```python
+from cast_planet import DataAPI
+
+api = DataAPI(api_key='your-api-key')
+
+# Get a list of available item types
+# https://developers.planet.com/docs/apis/data/items-assets/#item-types
+item_types = api.item_types()
+```
+
+## Modules
+### Data
+```{toctree}
+:maxdepth: 2
+cast_planet/data/index
+```
+
+### Orders
+```{toctree}
+:maxdepth: 2
+cast_planet/orders/index
+```
+
+### Basemaps
+```{toctree}
+:maxdepth: 2
+cast_planet/basemap/index
+```
+
+## Examples
+```{toctree}
+:maxdepth: 2
+examples/index
+```

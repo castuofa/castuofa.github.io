@@ -1,0 +1,7 @@
+# Models
+A list of models used in the DataAPI
+
+```{eval-rst}
+.. automodule:: cast_planet.data.models
+    :members:
+```

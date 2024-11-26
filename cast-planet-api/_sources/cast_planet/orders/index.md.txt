@@ -1,0 +1,25 @@
+# OrdersAPI
+Wrapper class for interacting with the Planet Orders API. Provides methods for creating, managing, and downloading orders.
+
+See the Planet Orders API documentation for more details: https://developers.planet.com/docs/apis/orders/
+
+## Example usage
+```python
+from cast_planet import OrdersApi
+
+orders = OrdersApi(api_key='your api key here')
+```
+
+## API reference
+```{eval-rst}
+OrdersApi
+=========
+.. autoclass:: cast_planet.OrdersApi
+    :members:
+
+Models
+======
+.. automodule:: cast_planet.orders.models
+    :members:
+    :exclude-members: BaseModel
+```

@@ -1,0 +1,25 @@
+# Filters
+## Asset
+```{eval-rst}
+.. autopydantic_model:: cast_planet.data.filters.AssetFilter
+```
+## Field
+```{eval-rst}
+.. automodule:: cast_planet.data.filters.field
+    :members:
+    :exclude-members: BaseFieldFilter
+```
+
+## Logical
+```{eval-rst}
+.. autopydantic_model:: cast_planet.data.filters.AndFilter
+    :inherited-members: LogicFilter
+.. autopydantic_model:: cast_planet.data.filters.NotFilter
+.. autopydantic_model:: cast_planet.data.filters.OrFilter
+    :inherited-members: LogicFilter
+```
+
+## Permission
+```{eval-rst}
+.. autopydantic_model:: cast_planet.data.filters.PermissionFilter
+```

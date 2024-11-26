@@ -1,0 +1,290 @@
+{
+ "cells": [
+  {
+   "cell_type": "code",
+   "id": "initial_id",
+   "metadata": {
+    "collapsed": true,
+    "ExecuteTime": {
+     "end_time": "2024-11-15T23:11:40.354665Z",
+     "start_time": "2024-11-15T23:11:40.178078Z"
+    }
+   },
+   "source": "from cast_planet import BaseMapAOISearch, OrdersApi",
+   "outputs": [],
+   "execution_count": 1
+  },
+  {
+   "metadata": {
+    "ExecuteTime": {
+     "end_time": "2024-11-15T23:11:43.098466Z",
+     "start_time": "2024-11-15T23:11:43.095069Z"
+    }
+   },
+   "cell_type": "code",
+   "source": "wizard = BaseMapAOISearch(api_key='PLAKc6e06068503b45989b8b13138a692582')",
+   "id": "e32817d33d0351e4",
+   "outputs": [],
+   "execution_count": 2
+  },
+  {
+   "metadata": {
+    "ExecuteTime": {
+     "end_time": "2024-11-15T23:11:45.155926Z",
+     "start_time": "2024-11-15T23:11:44.923570Z"
+    }
+   },
+   "cell_type": "code",
+   "source": "wizard.check_status(\"aef596e1-4e75-4616-8d6c-cf34da70ad45\")",
+   "id": "1297706de9fec758",
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "OrderStatus(state=<OrderState.SUCCESS: 'success'>, last_message='Manifest delivery completed')"
+      ]
+     },
+     "execution_count": 3,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "execution_count": 3
+  },
+  {
+   "metadata": {
+    "ExecuteTime": {
+     "end_time": "2024-11-15T23:11:54.786186Z",
+     "start_time": "2024-11-15T23:11:46.701970Z"
+    }
+   },
+   "cell_type": "code",
+   "source": [
+    "all_mosaics = wizard.list_mosaics()\n",
+    "mosaic_names = [x.name for x in all_mosaics]"
+   ],
+   "id": "b3300e25b021c333",
+   "outputs": [],
+   "execution_count": 4
+  },
+  {
+   "metadata": {
+    "ExecuteTime": {
+     "end_time": "2024-11-15T23:11:56.120432Z",
+     "start_time": "2024-11-15T23:11:56.117299Z"
+    }
+   },
+   "cell_type": "code",
+   "source": "mosaic_names[0]",
+   "id": "1966307d693b2ff8",
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "'global_monthly_2016_01_mosaic'"
+      ]
+     },
+     "execution_count": 5,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "execution_count": 5
+  },
+  {
+   "metadata": {
+    "ExecuteTime": {
+     "end_time": "2024-11-15T23:11:59.887401Z",
+     "start_time": "2024-11-15T23:11:59.885261Z"
+    }
+   },
+   "cell_type": "code",
+   "source": [
+    "washingtonCounty = {\n",
+    "  \"type\": \"Polygon\",\n",
+    "  \"properties\": {\n",
+    "    \"name\": \"Washington County, Arkansas\"\n",
+    "  },\n",
+    "  \"coordinates\": [\n",
+    "      [\n",
+    "        [-94.5342, 35.9746],\n",
+    "        [-94.5342, 36.2414],\n",
+    "        [-94.0893, 36.2414],\n",
+    "        [-94.0893, 35.9746],\n",
+    "        [-94.5342, 35.9746]\n",
+    "      ]\n",
+    "    ]\n",
+    "}\n"
+   ],
+   "id": "fd481bd63575d3f0",
+   "outputs": [],
+   "execution_count": 6
+  },
+  {
+   "metadata": {
+    "ExecuteTime": {
+     "end_time": "2024-11-15T23:12:03.812230Z",
+     "start_time": "2024-11-15T23:12:02.823463Z"
+    }
+   },
+   "cell_type": "code",
+   "source": "wizard.order_mosaic_geojson(mosaic_names[:1], aoi=washingtonCounty)",
+   "id": "762836cd4ecc07f4",
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "OrderDetails(products=[BaseMapsGeometrySource(mosaic_name='global_monthly_2016_01_mosaic', geometry=PolygonModel(type='Polygon', coordinates=[[Coordinates(lon=-94.5342, lat=35.9746), Coordinates(lon=-94.5342, lat=36.2414), Coordinates(lon=-94.0893, lat=36.2414), Coordinates(lon=-94.0893, lat=35.9746), Coordinates(lon=-94.5342, lat=35.9746)]]))], hosting=None, tools=[MergeObject(merge={}), BasemapClipObject(clip={})], links=OrderDetailsLinks(self='https://api.planet.com/compute/ops/orders/v2/c960c828-8a4b-44e4-a005-950d77ce9768', results=None), id=UUID('c960c828-8a4b-44e4-a005-950d77ce9768'), name='Basemap AOI Wizard: 4e6f503c-c2d9-465a-9090-5da58565bcd6', subscription_id=0, metadata=None, created_on=datetime.datetime(2024, 11, 15, 23, 12, 3, 567105, tzinfo=TzInfo(UTC)), last_modified=datetime.datetime(2024, 11, 15, 23, 12, 3, 567105, tzinfo=TzInfo(UTC)), state=<OrderState.QUEUED: 'queued'>, last_message='Preparing order', error_hints=[], delivery=None, notifications=OrderNotifications(webhook=None, email=False), order_type='partial', source_type='basemaps')"
+      ]
+     },
+     "execution_count": 7,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "execution_count": 7
+  },
+  {
+   "metadata": {
+    "ExecuteTime": {
+     "end_time": "2024-11-15T23:12:08.183632Z",
+     "start_time": "2024-11-15T23:12:08.179463Z"
+    }
+   },
+   "cell_type": "code",
+   "source": "mosaic_names[:1]",
+   "id": "be42f46bd9546781",
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "['global_monthly_2016_01_mosaic']"
+      ]
+     },
+     "execution_count": 8,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "execution_count": 8
+  },
+  {
+   "metadata": {
+    "ExecuteTime": {
+     "end_time": "2024-11-15T23:12:11.222709Z",
+     "start_time": "2024-11-15T23:12:11.219501Z"
+    }
+   },
+   "cell_type": "code",
+   "source": "ordersApi = OrdersApi(api_key='PLAKc6e06068503b45989b8b13138a692582')",
+   "id": "16344ddbe7043a8c",
+   "outputs": [],
+   "execution_count": 9
+  },
+  {
+   "metadata": {
+    "ExecuteTime": {
+     "end_time": "2024-11-15T23:12:13.536360Z",
+     "start_time": "2024-11-15T23:12:13.285063Z"
+    }
+   },
+   "cell_type": "code",
+   "source": [
+    "orders = ordersApi.list_all_account_orders()\n",
+    "for i in orders:\n",
+    "  i.print_info()"
+   ],
+   "id": "5937e0d52c16a6e6",
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "NAME:Basemap AOI Wizard: 4e6f503c-c2d9-465a-9090-5da58565bcd6\n",
+      "STATUS: OrderState.RUNNING - starting\n",
+      "NAME:Basemap AOI Wizard: 9dab0ed4-1578-4deb-8abb-cadf321a736e\n",
+      "STATUS: OrderState.SUCCESS - Manifest delivery completed\n"
+     ]
+    }
+   ],
+   "execution_count": 10
+  },
+  {
+   "metadata": {},
+   "cell_type": "code",
+   "source": "ordersApi.download_order_results(orders[0], folder='/Users/hayley/Documents/')",
+   "id": "dce73afa29b81b2f",
+   "outputs": [],
+   "execution_count": null
+  },
+  {
+   "metadata": {
+    "ExecuteTime": {
+     "end_time": "2024-11-15T23:12:54.620768Z",
+     "start_time": "2024-11-15T23:12:54.618587Z"
+    }
+   },
+   "cell_type": "code",
+   "source": [
+    "for k,v in orders[0].model_dump().items():\n",
+    "  print(f\"{k}:  {v}\")"
+   ],
+   "id": "51438e9b62a223a5",
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "products:  [{'mosaic_name': 'global_monthly_2016_01_mosaic', 'geometry': {'type': 'Polygon', 'coordinates': [[(-94.5342, 35.9746), (-94.5342, 36.2414), (-94.0893, 36.2414), (-94.0893, 35.9746), (-94.5342, 35.9746)]]}}]\n",
+      "hosting:  None\n",
+      "tools:  [{'merge': {}}, {'clip': {}}]\n",
+      "links:  {'self': 'https://api.planet.com/compute/ops/orders/v2/c960c828-8a4b-44e4-a005-950d77ce9768', 'results': None}\n",
+      "id:  c960c828-8a4b-44e4-a005-950d77ce9768\n",
+      "name:  Basemap AOI Wizard: 4e6f503c-c2d9-465a-9090-5da58565bcd6\n",
+      "subscription_id:  0\n",
+      "metadata:  None\n",
+      "created_on:  2024-11-15 23:12:03.567105+00:00\n",
+      "last_modified:  2024-11-15 23:12:10.970641+00:00\n",
+      "state:  OrderState.RUNNING\n",
+      "last_message:  starting\n",
+      "error_hints:  []\n",
+      "delivery:  None\n",
+      "notifications:  {'webhook': None, 'email': False}\n",
+      "order_type:  partial\n",
+      "source_type:  basemaps\n"
+     ]
+    }
+   ],
+   "execution_count": 11
+  },
+  {
+   "metadata": {},
+   "cell_type": "code",
+   "source": "",
+   "id": "ff40b4e7a1a2d6d1",
+   "outputs": [],
+   "execution_count": null
+  }
+ ],
+ "metadata": {
+  "kernelspec": {
+   "display_name": "Python 3",
+   "language": "python",
+   "name": "python3"
+  },
+  "language_info": {
+   "codemirror_mode": {
+    "name": "ipython",
+    "version": 2
+   },
+   "file_extension": ".py",
+   "mimetype": "text/x-python",
+   "name": "python",
+   "nbconvert_exporter": "python",
+   "pygments_lexer": "ipython2",
+   "version": "2.7.6"
+  }
+ },
+ "nbformat": 4,
+ "nbformat_minor": 5
+}

@@ -1,0 +1,67 @@
+# BasemapsAPI
+Wrapper class for interacting with the Planet Basemaps API. Provides methods for creating, managing, and downloading orders.
+
+See the Planet Basemaps API documentation for more details: https://developers.planet.com/docs/apis/basemaps/
+
+## Example usage
+```python
+from cast_planet import BasemapApi
+
+basemaps = BasemapApi(api_key='your api key here')
+
+basemaps.search_mosaics('monthly')
+```
+
+### Searching for basemaps using the BaseMApAOISearch
+Searching and ordering base map imagery usually requires a combination of 
+both the BasemapApi and the OrdersApi. In this case,
+the BaseMapAOISearch class has been created to search and order moasics
+from a single class.
+```python
+from cast_planet import BaseMapAOISearch
+
+aoi_search = BaseMapAOISearch(api_key='your-api-key')
+
+aoi = {
+  "type": "Polygon",
+  "properties": {
+    "name": "Washington County, Arkansas"
+  },
+  "coordinates": [
+      [
+        [-94.5342, 35.9746],
+        [-94.5342, 36.2414],
+        [-94.0893, 36.2414],
+        [-94.0893, 35.9746],
+        [-94.5342, 35.9746]
+      ]
+    ]
+}
+
+aoi_search.order_mosaic_geojson(['global_monthly_2016_01_mosaic'], aoi=aoi)
+```
+
+
+## API reference
+```{eval-rst}
+
+BasemapApi
+==========
+
+.. autoclass:: cast_planet.BasemapApi
+    :members:
+
+
+BasemapAOISearch
+================
+
+.. autoclass:: cast_planet.BasemapApi
+    :members:
+
+Models
+======
+
+.. automodule:: cast_planet.orders.models
+    :members:
+    :exclude-members: BaseModel
+```
