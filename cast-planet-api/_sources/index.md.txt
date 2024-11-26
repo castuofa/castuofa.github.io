@@ -5,11 +5,8 @@ Currently, the API allows for interfacing with the [Data](https://developers.pla
 [Orders](https://developers.planet.com/apis/orders/) APIs 
 
 ## Installation
-To install the package please contact Hayley at hhames@uark.edu to get a copy of 
-the current package and save it on your machine. Then, use the following to install it on your local environment.
-
 ```
-pip install path/to/file/cast_planet_api-0.1.0-py3-none-any.whl
+pip install cast-planet-api
 ```
 
 ## Usage 

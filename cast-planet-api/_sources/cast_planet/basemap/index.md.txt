@@ -51,17 +51,16 @@ BasemapApi
 .. autoclass:: cast_planet.BasemapApi
     :members:
 
-
 BasemapAOISearch
 ================
 
-.. autoclass:: cast_planet.BasemapApi
+.. autoclass:: cast_planet.BaseMapAOISearch
     :members:
 
 Models
 ======
 
-.. automodule:: cast_planet.orders.models
+.. automodule:: cast_planet.basemap.models
     :members:
     :exclude-members: BaseModel
 ```
