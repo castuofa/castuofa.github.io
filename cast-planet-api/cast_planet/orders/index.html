@@ -3482,11 +3482,14 @@
 <dt class="field-odd">Fields<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">delivery</span> <span class="pre">(cast_planet.orders.models.order_delivery.OrderDelivery</span> <span class="pre">|</span> <span class="pre">None)</span></code></p></li>
+<li><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">hosting</span> <span class="pre">(Optional[OrderHosting])</span></code></p></li>
 <li><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">name</span> <span class="pre">(str)</span></code></p></li>
 <li><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">notifications</span> <span class="pre">(cast_planet.orders.models.order_notifications.OrderNotifications</span> <span class="pre">|</span> <span class="pre">None)</span></code></p></li>
 <li><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">order_type</span> <span class="pre">(cast_planet.orders.models.common.OrderType)</span></code></p></li>
+<li><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">products</span> <span class="pre">(Optional[List[Union[SceneSource,</span> <span class="pre">BaseMapsGeometrySource,</span> <span class="pre">BaseMapsQuadIdSource]]])</span></code></p></li>
 <li><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">source_type</span> <span class="pre">(cast_planet.orders.models.common.OrderSource</span> <span class="pre">|</span> <span class="pre">None)</span></code></p></li>
 <li><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">subscription_id</span> <span class="pre">(int</span> <span class="pre">|</span> <span class="pre">None)</span></code></p></li>
+<li><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">tools</span> <span class="pre">(Optional[List[Union[HarmonizeObject,</span> <span class="pre">CoRegisterObject,</span> <span class="pre">ToarObject,</span> <span class="pre">SceneClipObject,</span> <span class="pre">BasemapClipObject,</span> <span class="pre">ReprojectObject,</span> <span class="pre">BandMathObject,</span> <span class="pre">CompositeObject,</span> <span class="pre">TileObject,</span> <span class="pre">CloudFilterObject,</span> <span class="pre">FileFormatObject,</span> <span class="pre">MergeObject]]])</span></code></p></li>
 </ul>
 </dd>
 </dl>
@@ -3495,6 +3498,11 @@
 <em class="property"><span class="pre">field</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">delivery</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code><span class="pre">[</span><a class="reference internal" href="#cast_planet.orders.models.OrderDelivery" title="cast_planet.orders.models.order_delivery.OrderDelivery"><code class="xref py py-class docutils literal notranslate"><span class="pre">OrderDelivery</span></code></a><span class="pre">]</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#cast_planet.orders.models.CreateOrder.delivery" title="Link to this definition"></a></dt>
 <dd><p>How should ordered products be delivered?</p>
 </dd></dl>
+
+<dl class="py attribute pydantic_field">
+<dt class="sig sig-object py" id="cast_planet.orders.models.CreateOrder.hosting">
+<em class="property"><span class="pre">field</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">hosting</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Optional[OrderHosting]</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#cast_planet.orders.models.CreateOrder.hosting" title="Link to this definition"></a></dt>
+<dd></dd></dl>
 
 <dl class="py attribute pydantic_field">
 <dt class="sig sig-object py" id="cast_planet.orders.models.CreateOrder.name">
@@ -3515,6 +3523,12 @@
 </dd></dl>
 
 <dl class="py attribute pydantic_field">
+<dt class="sig sig-object py" id="cast_planet.orders.models.CreateOrder.products">
+<em class="property"><span class="pre">field</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">products</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Optional[List[Union[SceneSource,</span> <span class="pre">BaseMapsGeometrySource,</span> <span class="pre">BaseMapsQuadIdSource]]]</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#cast_planet.orders.models.CreateOrder.products" title="Link to this definition"></a></dt>
+<dd><p>The products from the Data or Basemaps API to order.</p>
+</dd></dl>
+
+<dl class="py attribute pydantic_field">
 <dt class="sig sig-object py" id="cast_planet.orders.models.CreateOrder.source_type">
 <em class="property"><span class="pre">field</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">source_type</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code><span class="pre">[</span><a class="reference internal" href="#cast_planet.orders.models.OrderSource" title="cast_planet.orders.models.common.OrderSource"><code class="xref py py-class docutils literal notranslate"><span class="pre">OrderSource</span></code></a><span class="pre">]</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#cast_planet.orders.models.CreateOrder.source_type" title="Link to this definition"></a></dt>
 <dd><p>Source imagery type for all products. Default is scenes.</p>
@@ -3525,6 +3539,11 @@
 <em class="property"><span class="pre">field</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">subscription_id</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code><span class="pre">[</span><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code><span class="pre">]</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#cast_planet.orders.models.CreateOrder.subscription_id" title="Link to this definition"></a></dt>
 <dd><p>apply this orders against this quota subscription</p>
 </dd></dl>
+
+<dl class="py attribute pydantic_field">
+<dt class="sig sig-object py" id="cast_planet.orders.models.CreateOrder.tools">
+<em class="property"><span class="pre">field</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">tools</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Optional[List[Union[HarmonizeObject,</span> <span class="pre">CoRegisterObject,</span> <span class="pre">ToarObject,</span> <span class="pre">SceneClipObject,</span> <span class="pre">BasemapClipObject,</span> <span class="pre">ReprojectObject,</span> <span class="pre">BandMathObject,</span> <span class="pre">CompositeObject,</span> <span class="pre">TileObject,</span> <span class="pre">CloudFilterObject,</span> <span class="pre">FileFormatObject,</span> <span class="pre">MergeObject]]]</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#cast_planet.orders.models.CreateOrder.tools" title="Link to this definition"></a></dt>
+<dd></dd></dl>
 
 </dd></dl>
 
@@ -6515,6 +6534,7 @@
 <li><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">created_on</span> <span class="pre">(datetime.datetime)</span></code></p></li>
 <li><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">delivery</span> <span class="pre">(cast_planet.orders.models.order_delivery.OrderDelivery</span> <span class="pre">|</span> <span class="pre">None)</span></code></p></li>
 <li><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">error_hints</span> <span class="pre">(List[str])</span></code></p></li>
+<li><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">hosting</span> <span class="pre">(Optional[OrderHosting])</span></code></p></li>
 <li><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">id</span> <span class="pre">(uuid.UUID)</span></code></p></li>
 <li><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">last_message</span> <span class="pre">(str)</span></code></p></li>
 <li><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">last_modified</span> <span class="pre">(datetime.datetime)</span></code></p></li>
@@ -6523,9 +6543,11 @@
 <li><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">name</span> <span class="pre">(str)</span></code></p></li>
 <li><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">notifications</span> <span class="pre">(cast_planet.orders.models.order_notifications.OrderNotifications</span> <span class="pre">|</span> <span class="pre">None)</span></code></p></li>
 <li><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">order_type</span> <span class="pre">(str)</span></code></p></li>
+<li><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">products</span> <span class="pre">(Optional[List[Union[SceneSource,</span> <span class="pre">BaseMapsGeometrySource,</span> <span class="pre">BaseMapsQuadIdSource]]])</span></code></p></li>
 <li><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">source_type</span> <span class="pre">(str)</span></code></p></li>
 <li><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">state</span> <span class="pre">(cast_planet.orders.models.order_details.OrderState)</span></code></p></li>
 <li><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">subscription_id</span> <span class="pre">(int</span> <span class="pre">|</span> <span class="pre">None)</span></code></p></li>
+<li><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">tools</span> <span class="pre">(List[Union[HarmonizeObject,</span> <span class="pre">CoRegisterObject,</span> <span class="pre">ToarObject,</span> <span class="pre">SceneClipObject,</span> <span class="pre">BasemapClipObject,</span> <span class="pre">ReprojectObject,</span> <span class="pre">BandMathObject,</span> <span class="pre">CompositeObject,</span> <span class="pre">TileObject,</span> <span class="pre">CloudFilterObject,</span> <span class="pre">FileFormatObject,</span> <span class="pre">MergeObject]])</span></code></p></li>
 </ul>
 </dd>
 </dl>
@@ -6542,6 +6564,11 @@
 <dl class="py attribute pydantic_field">
 <dt class="sig sig-object py" id="cast_planet.orders.models.OrderDetails.error_hints">
 <em class="property"><span class="pre">field</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">error_hints</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code><span class="pre">[</span><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code><span class="pre">]</span></em><em class="property"> <span class="pre">[Required]</span></em><a class="headerlink" href="#cast_planet.orders.models.OrderDetails.error_hints" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute pydantic_field">
+<dt class="sig sig-object py" id="cast_planet.orders.models.OrderDetails.hosting">
+<em class="property"><span class="pre">field</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">hosting</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Optional[OrderHosting]</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#cast_planet.orders.models.OrderDetails.hosting" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute pydantic_field">
@@ -6585,6 +6612,12 @@
 <dd></dd></dl>
 
 <dl class="py attribute pydantic_field">
+<dt class="sig sig-object py" id="cast_planet.orders.models.OrderDetails.products">
+<em class="property"><span class="pre">field</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">products</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Optional[List[Union[SceneSource,</span> <span class="pre">BaseMapsGeometrySource,</span> <span class="pre">BaseMapsQuadIdSource]]]</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#cast_planet.orders.models.OrderDetails.products" title="Link to this definition"></a></dt>
+<dd><p>The products from the Data or Basemaps API to order.</p>
+</dd></dl>
+
+<dl class="py attribute pydantic_field">
 <dt class="sig sig-object py" id="cast_planet.orders.models.OrderDetails.source_type">
 <em class="property"><span class="pre">field</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">source_type</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></em><em class="property"> <span class="pre">[Required]</span></em><a class="headerlink" href="#cast_planet.orders.models.OrderDetails.source_type" title="Link to this definition"></a></dt>
 <dd></dd></dl>
@@ -6597,6 +6630,11 @@
 <dl class="py attribute pydantic_field">
 <dt class="sig sig-object py" id="cast_planet.orders.models.OrderDetails.subscription_id">
 <em class="property"><span class="pre">field</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">subscription_id</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code><span class="pre">[</span><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code><span class="pre">]</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">0</span></em><a class="headerlink" href="#cast_planet.orders.models.OrderDetails.subscription_id" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute pydantic_field">
+<dt class="sig sig-object py" id="cast_planet.orders.models.OrderDetails.tools">
+<em class="property"><span class="pre">field</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">tools</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">List[Union[HarmonizeObject,</span> <span class="pre">CoRegisterObject,</span> <span class="pre">ToarObject,</span> <span class="pre">SceneClipObject,</span> <span class="pre">BasemapClipObject,</span> <span class="pre">ReprojectObject,</span> <span class="pre">BandMathObject,</span> <span class="pre">CompositeObject,</span> <span class="pre">TileObject,</span> <span class="pre">CloudFilterObject,</span> <span class="pre">FileFormatObject,</span> <span class="pre">MergeObject]]</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">[]</span></em><a class="headerlink" href="#cast_planet.orders.models.OrderDetails.tools" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
@@ -6704,12 +6742,18 @@
 <dt class="field-odd">Fields<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">results</span> <span class="pre">(List[cast_planet.orders.models.order_details.OrderResult]</span> <span class="pre">|</span> <span class="pre">None)</span></code></p></li>
+<li><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">self</span> <span class="pre">(str)</span></code></p></li>
 </ul>
 </dd>
 </dl>
 <dl class="py attribute pydantic_field">
 <dt class="sig sig-object py" id="cast_planet.orders.models.OrderDetailsLinks.results">
 <em class="property"><span class="pre">field</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">results</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code><span class="pre">[</span><code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code><span class="pre">[</span><a class="reference internal" href="#cast_planet.orders.models.OrderResult" title="cast_planet.orders.models.order_details.OrderResult"><code class="xref py py-class docutils literal notranslate"><span class="pre">OrderResult</span></code></a><span class="pre">]]</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#cast_planet.orders.models.OrderDetailsLinks.results" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute pydantic_field">
+<dt class="sig sig-object py" id="cast_planet.orders.models.OrderDetailsLinks.self">
+<em class="property"><span class="pre">field</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">self</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><em class="property"> <span class="pre">[Required]</span></em><em class="property"> <span class="pre">(alias</span> <span class="pre">'_self')</span></em><a class="headerlink" href="#cast_planet.orders.models.OrderDetailsLinks.self" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 </dd></dl>

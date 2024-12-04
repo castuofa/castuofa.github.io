@@ -1,0 +1,371 @@
+{
+ "cells": [
+  {
+   "metadata": {},
+   "cell_type": "markdown",
+   "source": [
+    "# Creating an order for multiple items.\n",
+    "\n",
+    "Import the DataAPI and OrdersAPI wrapper."
+   ],
+   "id": "f01685732b07f567"
+  },
+  {
+   "cell_type": "code",
+   "id": "initial_id",
+   "metadata": {
+    "collapsed": true,
+    "ExecuteTime": {
+     "end_time": "2024-12-04T16:25:27.857814Z",
+     "start_time": "2024-12-04T16:25:27.652752Z"
+    }
+   },
+   "source": "from cast_planet import DataAPI, OrdersApi",
+   "outputs": [],
+   "execution_count": 1
+  },
+  {
+   "metadata": {
+    "ExecuteTime": {
+     "end_time": "2024-12-04T16:25:27.860741Z",
+     "start_time": "2024-12-04T16:25:27.858851Z"
+    }
+   },
+   "cell_type": "code",
+   "source": [
+    "data_api = DataAPI(api_key='your-api-key-here')\n",
+    "orders_api = OrdersApi(api_key='your-api-key-here')"
+   ],
+   "id": "d7694e9fea478943",
+   "outputs": [],
+   "execution_count": 2
+  },
+  {
+   "metadata": {},
+   "cell_type": "markdown",
+   "source": [
+    "## Searching for items.\n",
+    "For this example, we want to get an image for each month, over the UA Farm.\n",
+    "To do this, we will modify some the same filters used in the basic example."
+   ],
+   "id": "c28b776f4efee5a4"
+  },
+  {
+   "metadata": {
+    "ExecuteTime": {
+     "end_time": "2024-12-04T16:25:27.862832Z",
+     "start_time": "2024-12-04T16:25:27.861300Z"
+    }
+   },
+   "cell_type": "code",
+   "source": [
+    "from cast_planet.data.filters.field import GeometryFilter, DateRangeFilter\n",
+    "from cast_planet.data.filters.logical import AndFilter"
+   ],
+   "id": "a328a702a47de2cd",
+   "outputs": [],
+   "execution_count": 3
+  },
+  {
+   "metadata": {},
+   "cell_type": "markdown",
+   "source": "Since the area of interest will not be altered, we can create a single filter.",
+   "id": "ef616587b283c8ea"
+  },
+  {
+   "metadata": {
+    "ExecuteTime": {
+     "end_time": "2024-12-04T16:25:27.865185Z",
+     "start_time": "2024-12-04T16:25:27.863453Z"
+    }
+   },
+   "cell_type": "code",
+   "source": [
+    "point_of_interest = {\n",
+    "    \"type\": \"Point\",\n",
+    "    \"coordinates\": [-94.16987610350382, 36.09799882432394]\n",
+    "}\n",
+    "aoi_filter = GeometryFilter(field_name='geometry', config=point_of_interest)"
+   ],
+   "id": "9bd2b796f4496c3a",
+   "outputs": [],
+   "execution_count": 4
+  },
+  {
+   "metadata": {},
+   "cell_type": "markdown",
+   "source": "Now, we can create a loop to iterate over each month, create a new date filter and perform the search.",
+   "id": "1bf260c92f37fd01"
+  },
+  {
+   "metadata": {
+    "ExecuteTime": {
+     "end_time": "2024-12-04T16:25:30.990620Z",
+     "start_time": "2024-12-04T16:25:27.866519Z"
+    }
+   },
+   "cell_type": "code",
+   "source": [
+    "full_search_results = []\n",
+    "for i in range(1,13):\n",
+    "    # Create the date filter\n",
+    "    start_time = f'2023-{i:02}-15T00:00'\n",
+    "    end_time = f'2023-{i:02}-15T23:59'\n",
+    "    date_filter = DateRangeFilter(field_name='acquired', config={'gte': start_time, 'lte': end_time})\n",
+    "    \n",
+    "    # Combine the date filter with a logic filter\n",
+    "    search_filter = AndFilter(config=[aoi_filter,date_filter])\n",
+    "    \n",
+    "    # Perform the search.\n",
+    "    response = data_api.quick_search(item_types=['PSScene'], search_filter=search_filter)\n",
+    "    \n",
+    "    # Aggregate the search results to a single list.\n",
+    "    full_search_results.extend(response.features)\n",
+    "\n",
+    "# Display the final result count\n",
+    "len(full_search_results)\n",
+    "    "
+   ],
+   "id": "41da7aca5064edf",
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "12"
+      ]
+     },
+     "execution_count": 5,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "execution_count": 5
+  },
+  {
+   "metadata": {},
+   "cell_type": "markdown",
+   "source": [
+    "## Create an order to request multiple assets at once. \n",
+    "We can create an order by sending a list of products that we want to acquire, along with the item type and [product bundle](https://developers.planet.com/apis/orders/product-bundles-reference/) needed.\n",
+    "\n",
+    "\n",
+    "To learn more about creating an order see the [Planet Orders API documentation](https://developers.planet.com/apis/orders/reference/#tag/Orders/operation/createOrder).\n",
+    "<br/>\n",
+    "To learn more about the CreateOrder data model, please see the package documentation. \n"
+   ],
+   "id": "56ed9ceabc943687"
+  },
+  {
+   "metadata": {
+    "ExecuteTime": {
+     "end_time": "2024-12-04T16:25:31.772458Z",
+     "start_time": "2024-12-04T16:25:30.992033Z"
+    }
+   },
+   "cell_type": "code",
+   "source": [
+    "from cast_planet.orders.models.order_new import CreateOrder\n",
+    "\n",
+    "order_information = {\n",
+    "    \"name\" :f\"Farm Monthly - 2023\",\n",
+    "    \"source_type\": 'scenes',\n",
+    "    \"order_type\": \"partial\",\n",
+    "    \"products\": [\n",
+    "        {\n",
+    "            \"item_ids\": [x.id for x in full_search_results],\n",
+    "            \"item_type\": \"PSScene\",\n",
+    "            \"product_bundle\": \"analytic_udm2\",\n",
+    "        }\n",
+    "    ],\n",
+    "    \"notifications\": {\n",
+    "        'email': True\n",
+    "    }\n",
+    "}\n",
+    "order = orders_api.create_order(CreateOrder(**order_information))"
+   ],
+   "id": "22a0c42ecccb30ce",
+   "outputs": [],
+   "execution_count": 6
+  },
+  {
+   "metadata": {},
+   "cell_type": "markdown",
+   "source": [
+    "## View order status and download results.\n",
+    "Once your order is created, you can see it's updated status by using the get_order_details_by_id method, or you can view your order in the [My Orders](https://www.planet.com/account/#/orders) section of your planet account dashboard."
+   ],
+   "id": "29caf9322e072418"
+  },
+  {
+   "metadata": {
+    "ExecuteTime": {
+     "end_time": "2024-12-04T16:25:31.961371Z",
+     "start_time": "2024-12-04T16:25:31.775034Z"
+    }
+   },
+   "cell_type": "code",
+   "source": "order = orders_api.get_order_details_by_id('5bfa8287-f605-439e-8c55-523a8450f739')",
+   "id": "45eb49545f02809d",
+   "outputs": [],
+   "execution_count": 7
+  },
+  {
+   "metadata": {},
+   "cell_type": "markdown",
+   "source": [
+    "Once your order is completed, you can download all the via the api with the download_order_results method. This will download ALL files produced by the order. \n",
+    "<br/><br/>\n",
+    "If you find that you only want to download some files, or you would like to preview the items beforehand. You may view the order by clicking on order in the My Orders section of the dashboard, or going to https://www.planet.com/account/#/orders/your-order-id-here"
+   ],
+   "id": "ab57ee9b9ab3d17b"
+  },
+  {
+   "metadata": {
+    "ExecuteTime": {
+     "end_time": "2024-12-04T16:29:17.891693Z",
+     "start_time": "2024-12-04T16:25:31.963584Z"
+    }
+   },
+   "cell_type": "code",
+   "source": "orders_api.download_order_results('5bfa8287-f605-439e-8c55-523a8450f739', 'order-example')",
+   "id": "5235d236a142a5ad",
+   "outputs": [
+    {
+     "name": "stderr",
+     "output_type": "stream",
+     "text": [
+      "order-example/5bfa8287-f605-439e-8c55-523a8450f739/PSScene/20231215_161357_05_2415_3B_udm2.tif: 100%|##########| 6.25M/6.25M [00:00<00:00, 24.1MB/s]\n",
+      "order-example/5bfa8287-f605-439e-8c55-523a8450f739/PSScene/20231215_161357_05_2415_3B_AnalyticMS_metadata.xml: 100%|##########| 10.3k/10.3k [00:00<00:00, 10.7MB/s]\n",
+      "order-example/5bfa8287-f605-439e-8c55-523a8450f739/PSScene/20231215_161357_05_2415_3B_AnalyticMS.tif: 100%|##########| 494M/494M [00:14<00:00, 35.1MB/s] \n",
+      "order-example/5bfa8287-f605-439e-8c55-523a8450f739/PSScene/20231215_161357_05_2415_metadata.json: 100%|##########| 961/961 [00:00<00:00, 10.5MB/s]\n",
+      "order-example/5bfa8287-f605-439e-8c55-523a8450f739/PSScene/20231015_160905_18_24a9_3B_udm2.tif: 100%|##########| 5.77M/5.77M [00:00<00:00, 24.4MB/s]\n",
+      "order-example/5bfa8287-f605-439e-8c55-523a8450f739/PSScene/20231015_160905_18_24a9_3B_AnalyticMS_metadata.xml: 100%|##########| 10.3k/10.3k [00:00<00:00, 22.7MB/s]\n",
+      "order-example/5bfa8287-f605-439e-8c55-523a8450f739/PSScene/20231015_160905_18_24a9_3B_AnalyticMS.tif: 100%|##########| 586M/586M [00:16<00:00, 34.5MB/s] \n",
+      "order-example/5bfa8287-f605-439e-8c55-523a8450f739/PSScene/20231015_160905_18_24a9_metadata.json: 100%|##########| 969/969 [00:00<00:00, 3.12MB/s]\n",
+      "order-example/5bfa8287-f605-439e-8c55-523a8450f739/PSScene/20230615_164415_25_248e_3B_udm2.tif: 100%|##########| 4.29M/4.29M [00:00<00:00, 36.4MB/s]\n",
+      "order-example/5bfa8287-f605-439e-8c55-523a8450f739/PSScene/20230615_164415_25_248e_3B_AnalyticMS_metadata.xml: 100%|##########| 10.3k/10.3k [00:00<00:00, 10.3MB/s]\n",
+      "order-example/5bfa8287-f605-439e-8c55-523a8450f739/PSScene/20230615_164415_25_248e_3B_AnalyticMS.tif: 100%|##########| 584M/584M [00:16<00:00, 34.8MB/s] \n",
+      "order-example/5bfa8287-f605-439e-8c55-523a8450f739/PSScene/20230615_164415_25_248e_metadata.json: 100%|##########| 969/969 [00:00<00:00, 3.23MB/s]\n",
+      "order-example/5bfa8287-f605-439e-8c55-523a8450f739/PSScene/20230815_160845_66_24a7_3B_udm2.tif: 100%|##########| 4.23M/4.23M [00:00<00:00, 33.8MB/s]\n",
+      "order-example/5bfa8287-f605-439e-8c55-523a8450f739/PSScene/20230815_160845_66_24a7_3B_AnalyticMS_metadata.xml: 100%|##########| 10.3k/10.3k [00:00<00:00, 11.8MB/s]\n",
+      "order-example/5bfa8287-f605-439e-8c55-523a8450f739/PSScene/20230815_160845_66_24a7_3B_AnalyticMS.tif: 100%|##########| 612M/612M [00:17<00:00, 34.4MB/s] \n",
+      "order-example/5bfa8287-f605-439e-8c55-523a8450f739/PSScene/20230815_160845_66_24a7_metadata.json: 100%|##########| 970/970 [00:00<00:00, 10.7MB/s]\n",
+      "order-example/5bfa8287-f605-439e-8c55-523a8450f739/PSScene/20230115_160153_73_241d_3B_udm2.tif: 100%|##########| 8.20M/8.20M [00:00<00:00, 37.4MB/s]\n",
+      "order-example/5bfa8287-f605-439e-8c55-523a8450f739/PSScene/20230115_160153_73_241d_3B_AnalyticMS_metadata.xml: 100%|##########| 10.3k/10.3k [00:00<00:00, 8.15MB/s]\n",
+      "order-example/5bfa8287-f605-439e-8c55-523a8450f739/PSScene/20230115_160153_73_241d_3B_AnalyticMS.tif: 100%|##########| 564M/564M [00:16<00:00, 35.2MB/s] \n",
+      "order-example/5bfa8287-f605-439e-8c55-523a8450f739/PSScene/20230115_160153_73_241d_metadata.json: 100%|##########| 975/975 [00:00<00:00, 11.6MB/s]\n",
+      "order-example/5bfa8287-f605-439e-8c55-523a8450f739/PSScene/20230515_160646_65_24b9_3B_udm2.tif: 100%|##########| 10.9M/10.9M [00:00<00:00, 36.1MB/s]\n",
+      "order-example/5bfa8287-f605-439e-8c55-523a8450f739/PSScene/20230515_160646_65_24b9_3B_AnalyticMS_metadata.xml: 100%|##########| 10.3k/10.3k [00:00<00:00, 26.9MB/s]\n",
+      "order-example/5bfa8287-f605-439e-8c55-523a8450f739/PSScene/20230515_160646_65_24b9_3B_AnalyticMS.tif: 100%|##########| 667M/667M [00:19<00:00, 34.4MB/s] \n",
+      "order-example/5bfa8287-f605-439e-8c55-523a8450f739/PSScene/20230515_160646_65_24b9_metadata.json: 100%|##########| 971/971 [00:00<00:00, 4.08MB/s]\n",
+      "order-example/5bfa8287-f605-439e-8c55-523a8450f739/PSScene/20230615_160747_52_24ab_3B_udm2.tif: 100%|##########| 8.70M/8.70M [00:00<00:00, 38.5MB/s]\n",
+      "order-example/5bfa8287-f605-439e-8c55-523a8450f739/PSScene/20230615_160747_52_24ab_3B_AnalyticMS_metadata.xml: 100%|##########| 10.3k/10.3k [00:00<00:00, 12.8MB/s]\n",
+      "order-example/5bfa8287-f605-439e-8c55-523a8450f739/PSScene/20230615_160747_52_24ab_3B_AnalyticMS.tif: 100%|##########| 666M/666M [00:19<00:00, 33.6MB/s] \n",
+      "order-example/5bfa8287-f605-439e-8c55-523a8450f739/PSScene/20230615_160747_52_24ab_metadata.json: 100%|##########| 973/973 [00:00<00:00, 3.58MB/s]\n",
+      "order-example/5bfa8287-f605-439e-8c55-523a8450f739/PSScene/20230615_160749_84_24ab_3B_udm2.tif: 100%|##########| 7.28M/7.28M [00:00<00:00, 34.8MB/s]\n",
+      "order-example/5bfa8287-f605-439e-8c55-523a8450f739/PSScene/20230615_160749_84_24ab_3B_AnalyticMS_metadata.xml: 100%|##########| 10.3k/10.3k [00:00<00:00, 7.93MB/s]\n",
+      "order-example/5bfa8287-f605-439e-8c55-523a8450f739/PSScene/20230615_160749_84_24ab_3B_AnalyticMS.tif: 100%|##########| 658M/658M [00:18<00:00, 34.7MB/s] \n",
+      "order-example/5bfa8287-f605-439e-8c55-523a8450f739/PSScene/20230615_160749_84_24ab_metadata.json: 100%|##########| 972/972 [00:00<00:00, 8.15MB/s]\n",
+      "order-example/5bfa8287-f605-439e-8c55-523a8450f739/PSScene/20230315_160524_30_241f_3B_udm2.tif: 100%|##########| 8.40M/8.40M [00:00<00:00, 35.5MB/s]\n",
+      "order-example/5bfa8287-f605-439e-8c55-523a8450f739/PSScene/20230315_160524_30_241f_3B_AnalyticMS_metadata.xml: 100%|##########| 10.3k/10.3k [00:00<00:00, 12.5MB/s]\n",
+      "order-example/5bfa8287-f605-439e-8c55-523a8450f739/PSScene/20230315_160524_30_241f_3B_AnalyticMS.tif: 100%|##########| 546M/546M [00:15<00:00, 35.1MB/s] \n",
+      "order-example/5bfa8287-f605-439e-8c55-523a8450f739/PSScene/20230315_160524_30_241f_metadata.json: 100%|##########| 972/972 [00:00<00:00, 4.12MB/s]\n",
+      "order-example/5bfa8287-f605-439e-8c55-523a8450f739/PSScene/20230715_160842_98_24b4_3B_udm2.tif: 100%|##########| 5.34M/5.34M [00:00<00:00, 32.0MB/s]\n",
+      "order-example/5bfa8287-f605-439e-8c55-523a8450f739/PSScene/20230715_160842_98_24b4_3B_AnalyticMS_metadata.xml: 100%|##########| 10.3k/10.3k [00:00<00:00, 3.17MB/s]\n",
+      "order-example/5bfa8287-f605-439e-8c55-523a8450f739/PSScene/20230715_160842_98_24b4_3B_AnalyticMS.tif: 100%|##########| 646M/646M [00:18<00:00, 34.5MB/s] \n",
+      "order-example/5bfa8287-f605-439e-8c55-523a8450f739/PSScene/20230715_160842_98_24b4_metadata.json: 100%|##########| 968/968 [00:00<00:00, 8.71MB/s]\n",
+      "order-example/5bfa8287-f605-439e-8c55-523a8450f739/PSScene/20230915_161141_08_24bc_3B_udm2.tif: 100%|##########| 2.42M/2.42M [00:00<00:00, 38.8MB/s]\n",
+      "order-example/5bfa8287-f605-439e-8c55-523a8450f739/PSScene/20230915_161141_08_24bc_3B_AnalyticMS_metadata.xml: 100%|##########| 10.3k/10.3k [00:00<00:00, 8.76MB/s]\n",
+      "order-example/5bfa8287-f605-439e-8c55-523a8450f739/PSScene/20230915_161141_08_24bc_3B_AnalyticMS.tif: 100%|##########| 615M/615M [00:17<00:00, 34.2MB/s] \n",
+      "order-example/5bfa8287-f605-439e-8c55-523a8450f739/PSScene/20230915_161141_08_24bc_metadata.json: 100%|##########| 971/971 [00:00<00:00, 10.2MB/s]\n",
+      "order-example/5bfa8287-f605-439e-8c55-523a8450f739/PSScene/20230115_160156_05_241d_3B_udm2.tif: 100%|##########| 8.28M/8.28M [00:00<00:00, 38.1MB/s]\n",
+      "order-example/5bfa8287-f605-439e-8c55-523a8450f739/PSScene/20230115_160156_05_241d_3B_AnalyticMS_metadata.xml: 100%|##########| 10.3k/10.3k [00:00<00:00, 22.5MB/s]\n",
+      "order-example/5bfa8287-f605-439e-8c55-523a8450f739/PSScene/20230115_160156_05_241d_3B_AnalyticMS.tif: 100%|##########| 557M/557M [00:16<00:00, 34.6MB/s] \n",
+      "order-example/5bfa8287-f605-439e-8c55-523a8450f739/PSScene/20230115_160156_05_241d_metadata.json: 100%|##########| 970/970 [00:00<00:00, 4.01MB/s]\n",
+      "order-example/5bfa8287-f605-439e-8c55-523a8450f739/manifest.json: 100%|##########| 18.1k/18.1k [00:00<00:00, 19.7MB/s]\n"
+     ]
+    },
+    {
+     "data": {
+      "text/plain": [
+       "['order-example/5bfa8287-f605-439e-8c55-523a8450f739/PSScene/20231215_161357_05_2415_3B_udm2.tif',\n",
+       " 'order-example/5bfa8287-f605-439e-8c55-523a8450f739/PSScene/20231215_161357_05_2415_3B_AnalyticMS_metadata.xml',\n",
+       " 'order-example/5bfa8287-f605-439e-8c55-523a8450f739/PSScene/20231215_161357_05_2415_3B_AnalyticMS.tif',\n",
+       " 'order-example/5bfa8287-f605-439e-8c55-523a8450f739/PSScene/20231215_161357_05_2415_metadata.json',\n",
+       " 'order-example/5bfa8287-f605-439e-8c55-523a8450f739/PSScene/20231015_160905_18_24a9_3B_udm2.tif',\n",
+       " 'order-example/5bfa8287-f605-439e-8c55-523a8450f739/PSScene/20231015_160905_18_24a9_3B_AnalyticMS_metadata.xml',\n",
+       " 'order-example/5bfa8287-f605-439e-8c55-523a8450f739/PSScene/20231015_160905_18_24a9_3B_AnalyticMS.tif',\n",
+       " 'order-example/5bfa8287-f605-439e-8c55-523a8450f739/PSScene/20231015_160905_18_24a9_metadata.json',\n",
+       " 'order-example/5bfa8287-f605-439e-8c55-523a8450f739/PSScene/20230615_164415_25_248e_3B_udm2.tif',\n",
+       " 'order-example/5bfa8287-f605-439e-8c55-523a8450f739/PSScene/20230615_164415_25_248e_3B_AnalyticMS_metadata.xml',\n",
+       " 'order-example/5bfa8287-f605-439e-8c55-523a8450f739/PSScene/20230615_164415_25_248e_3B_AnalyticMS.tif',\n",
+       " 'order-example/5bfa8287-f605-439e-8c55-523a8450f739/PSScene/20230615_164415_25_248e_metadata.json',\n",
+       " 'order-example/5bfa8287-f605-439e-8c55-523a8450f739/PSScene/20230815_160845_66_24a7_3B_udm2.tif',\n",
+       " 'order-example/5bfa8287-f605-439e-8c55-523a8450f739/PSScene/20230815_160845_66_24a7_3B_AnalyticMS_metadata.xml',\n",
+       " 'order-example/5bfa8287-f605-439e-8c55-523a8450f739/PSScene/20230815_160845_66_24a7_3B_AnalyticMS.tif',\n",
+       " 'order-example/5bfa8287-f605-439e-8c55-523a8450f739/PSScene/20230815_160845_66_24a7_metadata.json',\n",
+       " 'order-example/5bfa8287-f605-439e-8c55-523a8450f739/PSScene/20230115_160153_73_241d_3B_udm2.tif',\n",
+       " 'order-example/5bfa8287-f605-439e-8c55-523a8450f739/PSScene/20230115_160153_73_241d_3B_AnalyticMS_metadata.xml',\n",
+       " 'order-example/5bfa8287-f605-439e-8c55-523a8450f739/PSScene/20230115_160153_73_241d_3B_AnalyticMS.tif',\n",
+       " 'order-example/5bfa8287-f605-439e-8c55-523a8450f739/PSScene/20230115_160153_73_241d_metadata.json',\n",
+       " 'order-example/5bfa8287-f605-439e-8c55-523a8450f739/PSScene/20230515_160646_65_24b9_3B_udm2.tif',\n",
+       " 'order-example/5bfa8287-f605-439e-8c55-523a8450f739/PSScene/20230515_160646_65_24b9_3B_AnalyticMS_metadata.xml',\n",
+       " 'order-example/5bfa8287-f605-439e-8c55-523a8450f739/PSScene/20230515_160646_65_24b9_3B_AnalyticMS.tif',\n",
+       " 'order-example/5bfa8287-f605-439e-8c55-523a8450f739/PSScene/20230515_160646_65_24b9_metadata.json',\n",
+       " 'order-example/5bfa8287-f605-439e-8c55-523a8450f739/PSScene/20230615_160747_52_24ab_3B_udm2.tif',\n",
+       " 'order-example/5bfa8287-f605-439e-8c55-523a8450f739/PSScene/20230615_160747_52_24ab_3B_AnalyticMS_metadata.xml',\n",
+       " 'order-example/5bfa8287-f605-439e-8c55-523a8450f739/PSScene/20230615_160747_52_24ab_3B_AnalyticMS.tif',\n",
+       " 'order-example/5bfa8287-f605-439e-8c55-523a8450f739/PSScene/20230615_160747_52_24ab_metadata.json',\n",
+       " 'order-example/5bfa8287-f605-439e-8c55-523a8450f739/PSScene/20230615_160749_84_24ab_3B_udm2.tif',\n",
+       " 'order-example/5bfa8287-f605-439e-8c55-523a8450f739/PSScene/20230615_160749_84_24ab_3B_AnalyticMS_metadata.xml',\n",
+       " 'order-example/5bfa8287-f605-439e-8c55-523a8450f739/PSScene/20230615_160749_84_24ab_3B_AnalyticMS.tif',\n",
+       " 'order-example/5bfa8287-f605-439e-8c55-523a8450f739/PSScene/20230615_160749_84_24ab_metadata.json',\n",
+       " 'order-example/5bfa8287-f605-439e-8c55-523a8450f739/PSScene/20230315_160524_30_241f_3B_udm2.tif',\n",
+       " 'order-example/5bfa8287-f605-439e-8c55-523a8450f739/PSScene/20230315_160524_30_241f_3B_AnalyticMS_metadata.xml',\n",
+       " 'order-example/5bfa8287-f605-439e-8c55-523a8450f739/PSScene/20230315_160524_30_241f_3B_AnalyticMS.tif',\n",
+       " 'order-example/5bfa8287-f605-439e-8c55-523a8450f739/PSScene/20230315_160524_30_241f_metadata.json',\n",
+       " 'order-example/5bfa8287-f605-439e-8c55-523a8450f739/PSScene/20230715_160842_98_24b4_3B_udm2.tif',\n",
+       " 'order-example/5bfa8287-f605-439e-8c55-523a8450f739/PSScene/20230715_160842_98_24b4_3B_AnalyticMS_metadata.xml',\n",
+       " 'order-example/5bfa8287-f605-439e-8c55-523a8450f739/PSScene/20230715_160842_98_24b4_3B_AnalyticMS.tif',\n",
+       " 'order-example/5bfa8287-f605-439e-8c55-523a8450f739/PSScene/20230715_160842_98_24b4_metadata.json',\n",
+       " 'order-example/5bfa8287-f605-439e-8c55-523a8450f739/PSScene/20230915_161141_08_24bc_3B_udm2.tif',\n",
+       " 'order-example/5bfa8287-f605-439e-8c55-523a8450f739/PSScene/20230915_161141_08_24bc_3B_AnalyticMS_metadata.xml',\n",
+       " 'order-example/5bfa8287-f605-439e-8c55-523a8450f739/PSScene/20230915_161141_08_24bc_3B_AnalyticMS.tif',\n",
+       " 'order-example/5bfa8287-f605-439e-8c55-523a8450f739/PSScene/20230915_161141_08_24bc_metadata.json',\n",
+       " 'order-example/5bfa8287-f605-439e-8c55-523a8450f739/PSScene/20230115_160156_05_241d_3B_udm2.tif',\n",
+       " 'order-example/5bfa8287-f605-439e-8c55-523a8450f739/PSScene/20230115_160156_05_241d_3B_AnalyticMS_metadata.xml',\n",
+       " 'order-example/5bfa8287-f605-439e-8c55-523a8450f739/PSScene/20230115_160156_05_241d_3B_AnalyticMS.tif',\n",
+       " 'order-example/5bfa8287-f605-439e-8c55-523a8450f739/PSScene/20230115_160156_05_241d_metadata.json',\n",
+       " 'order-example/5bfa8287-f605-439e-8c55-523a8450f739/manifest.json']"
+      ]
+     },
+     "execution_count": 8,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "execution_count": 8
+  }
+ ],
+ "metadata": {
+  "kernelspec": {
+   "display_name": "Python 3",
+   "language": "python",
+   "name": "python3"
+  },
+  "language_info": {
+   "codemirror_mode": {
+    "name": "ipython",
+    "version": 2
+   },
+   "file_extension": ".py",
+   "mimetype": "text/x-python",
+   "name": "python",
+   "nbconvert_exporter": "python",
+   "pygments_lexer": "ipython2",
+   "version": "2.7.6"
+  }
+ },
+ "nbformat": 4,
+ "nbformat_minor": 5
+}

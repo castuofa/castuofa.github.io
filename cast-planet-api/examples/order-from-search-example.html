@@ -1,0 +1,374 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Creating an order for multiple items. &mdash; cast_planet  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../_static/autodoc_pydantic.css?v=a0a71c94" />
+      <link rel="stylesheet" type="text/css" href="../_static/nbsphinx-code-cells.css?v=2aa19091" />
+
+  
+    <link rel="canonical" href="/cast-planet-api/examples/order-from-search-example.html" />
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+      <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+      <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="prev" title="Searching for Scenes by geojson location and date range." href="basic-example.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            cast_planet
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../cast_planet/data/index.html">DataAPI</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../cast_planet/orders/index.html">OrdersAPI</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../cast_planet/basemap/index.html">BasemapsAPI</a></li>
+</ul>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Example Jupyter Notebooks</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="basic-example.html">Searching for Scenes by geojson location and date range.</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Creating an order for multiple items.</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#Searching-for-items.">Searching for items.</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#Create-an-order-to-request-multiple-assets-at-once.">Create an order to request multiple assets at once.</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#View-order-status-and-download-results.">View order status and download results.</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">cast_planet</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="index.html">Example Jupyter Notebooks</a></li>
+      <li class="breadcrumb-item active">Creating an order for multiple items.</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/examples/order-from-search-example.ipynb.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="Creating-an-order-for-multiple-items.">
+<h1>Creating an order for multiple items.<a class="headerlink" href="#Creating-an-order-for-multiple-items." title="Link to this heading"></a></h1>
+<p>Import the DataAPI and OrdersAPI wrapper.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython2 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">cast_planet</span> <span class="kn">import</span> <span class="n">DataAPI</span><span class="p">,</span> <span class="n">OrdersApi</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython2 notranslate"><div class="highlight"><pre><span></span><span class="n">data_api</span> <span class="o">=</span> <span class="n">DataAPI</span><span class="p">(</span><span class="n">api_key</span><span class="o">=</span><span class="s1">&#39;your-api-key-here&#39;</span><span class="p">)</span>
+<span class="n">orders_api</span> <span class="o">=</span> <span class="n">OrdersApi</span><span class="p">(</span><span class="n">api_key</span><span class="o">=</span><span class="s1">&#39;your-api-key-here&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<section id="Searching-for-items.">
+<h2>Searching for items.<a class="headerlink" href="#Searching-for-items." title="Link to this heading"></a></h2>
+<p>For this example, we want to get an image for each month, over the UA Farm. To do this, we will modify some the same filters used in the basic example.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython2 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">cast_planet.data.filters.field</span> <span class="kn">import</span> <span class="n">GeometryFilter</span><span class="p">,</span> <span class="n">DateRangeFilter</span>
+<span class="kn">from</span> <span class="nn">cast_planet.data.filters.logical</span> <span class="kn">import</span> <span class="n">AndFilter</span>
+</pre></div>
+</div>
+</div>
+<p>Since the area of interest will not be altered, we can create a single filter.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython2 notranslate"><div class="highlight"><pre><span></span><span class="n">point_of_interest</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;Point&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;coordinates&quot;</span><span class="p">:</span> <span class="p">[</span><span class="o">-</span><span class="mf">94.16987610350382</span><span class="p">,</span> <span class="mf">36.09799882432394</span><span class="p">]</span>
+<span class="p">}</span>
+<span class="n">aoi_filter</span> <span class="o">=</span> <span class="n">GeometryFilter</span><span class="p">(</span><span class="n">field_name</span><span class="o">=</span><span class="s1">&#39;geometry&#39;</span><span class="p">,</span> <span class="n">config</span><span class="o">=</span><span class="n">point_of_interest</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<p>Now, we can create a loop to iterate over each month, create a new date filter and perform the search.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython2 notranslate"><div class="highlight"><pre><span></span><span class="n">full_search_results</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">13</span><span class="p">):</span>
+    <span class="c1"># Create the date filter</span>
+    <span class="n">start_time</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;2023-</span><span class="si">{</span><span class="n">i</span><span class="si">:</span><span class="s1">02</span><span class="si">}</span><span class="s1">-15T00:00&#39;</span>
+    <span class="n">end_time</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;2023-</span><span class="si">{</span><span class="n">i</span><span class="si">:</span><span class="s1">02</span><span class="si">}</span><span class="s1">-15T23:59&#39;</span>
+    <span class="n">date_filter</span> <span class="o">=</span> <span class="n">DateRangeFilter</span><span class="p">(</span><span class="n">field_name</span><span class="o">=</span><span class="s1">&#39;acquired&#39;</span><span class="p">,</span> <span class="n">config</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;gte&#39;</span><span class="p">:</span> <span class="n">start_time</span><span class="p">,</span> <span class="s1">&#39;lte&#39;</span><span class="p">:</span> <span class="n">end_time</span><span class="p">})</span>
+
+    <span class="c1"># Combine the date filter with a logic filter</span>
+    <span class="n">search_filter</span> <span class="o">=</span> <span class="n">AndFilter</span><span class="p">(</span><span class="n">config</span><span class="o">=</span><span class="p">[</span><span class="n">aoi_filter</span><span class="p">,</span><span class="n">date_filter</span><span class="p">])</span>
+
+    <span class="c1"># Perform the search.</span>
+    <span class="n">response</span> <span class="o">=</span> <span class="n">data_api</span><span class="o">.</span><span class="n">quick_search</span><span class="p">(</span><span class="n">item_types</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;PSScene&#39;</span><span class="p">],</span> <span class="n">search_filter</span><span class="o">=</span><span class="n">search_filter</span><span class="p">)</span>
+
+    <span class="c1"># Aggregate the search results to a single list.</span>
+    <span class="n">full_search_results</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">features</span><span class="p">)</span>
+
+<span class="c1"># Display the final result count</span>
+<span class="nb">len</span><span class="p">(</span><span class="n">full_search_results</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+12
+</pre></div></div>
+</div>
+</section>
+<section id="Create-an-order-to-request-multiple-assets-at-once.">
+<h2>Create an order to request multiple assets at once.<a class="headerlink" href="#Create-an-order-to-request-multiple-assets-at-once." title="Link to this heading"></a></h2>
+<p>We can create an order by sending a list of products that we want to acquire, along with the item type and <a class="reference external" href="https://developers.planet.com/apis/orders/product-bundles-reference/">product bundle</a> needed.</p>
+<p>To learn more about creating an order see the <a class="reference external" href="https://developers.planet.com/apis/orders/reference/#tag/Orders/operation/createOrder">Planet Orders API documentation</a>. To learn more about the CreateOrder data model, please see the package documentation.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython2 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">cast_planet.orders.models.order_new</span> <span class="kn">import</span> <span class="n">CreateOrder</span>
+
+<span class="n">order_information</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">&quot;name&quot;</span> <span class="p">:</span><span class="sa">f</span><span class="s2">&quot;Farm Monthly - 2023&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;source_type&quot;</span><span class="p">:</span> <span class="s1">&#39;scenes&#39;</span><span class="p">,</span>
+    <span class="s2">&quot;order_type&quot;</span><span class="p">:</span> <span class="s2">&quot;partial&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;products&quot;</span><span class="p">:</span> <span class="p">[</span>
+        <span class="p">{</span>
+            <span class="s2">&quot;item_ids&quot;</span><span class="p">:</span> <span class="p">[</span><span class="n">x</span><span class="o">.</span><span class="n">id</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">full_search_results</span><span class="p">],</span>
+            <span class="s2">&quot;item_type&quot;</span><span class="p">:</span> <span class="s2">&quot;PSScene&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;product_bundle&quot;</span><span class="p">:</span> <span class="s2">&quot;analytic_udm2&quot;</span><span class="p">,</span>
+        <span class="p">}</span>
+    <span class="p">],</span>
+    <span class="s2">&quot;notifications&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s1">&#39;email&#39;</span><span class="p">:</span> <span class="kc">True</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+<span class="n">order</span> <span class="o">=</span> <span class="n">orders_api</span><span class="o">.</span><span class="n">create_order</span><span class="p">(</span><span class="n">CreateOrder</span><span class="p">(</span><span class="o">**</span><span class="n">order_information</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+</section>
+<section id="View-order-status-and-download-results.">
+<h2>View order status and download results.<a class="headerlink" href="#View-order-status-and-download-results." title="Link to this heading"></a></h2>
+<p>Once your order is created, you can see it’s updated status by using the get_order_details_by_id method, or you can view your order in the <a class="reference external" href="https://www.planet.com/account/#/orders">My Orders</a> section of your planet account dashboard.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython2 notranslate"><div class="highlight"><pre><span></span><span class="n">order</span> <span class="o">=</span> <span class="n">orders_api</span><span class="o">.</span><span class="n">get_order_details_by_id</span><span class="p">(</span><span class="s1">&#39;5bfa8287-f605-439e-8c55-523a8450f739&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<p>Once your order is completed, you can download all the via the api with the download_order_results method. This will download ALL files produced by the order. If you find that you only want to download some files, or you would like to preview the items beforehand. You may view the order by clicking on order in the My Orders section of the dashboard, or going to <a class="reference external" href="https://www.planet.com/account/#/orders/your-order-id-here">https://www.planet.com/account/#/orders/your-order-id-here</a></p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython2 notranslate"><div class="highlight"><pre><span></span><span class="n">orders_api</span><span class="o">.</span><span class="n">download_order_results</span><span class="p">(</span><span class="s1">&#39;5bfa8287-f605-439e-8c55-523a8450f739&#39;</span><span class="p">,</span> <span class="s1">&#39;order-example&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area stderr docutils container">
+<div class="highlight"><pre>
+order-example/5bfa8287-f605-439e-8c55-523a8450f739/PSScene/20231215_161357_05_2415_3B_udm2.tif: 100%|##########| 6.25M/6.25M [00:00&lt;00:00, 24.1MB/s]
+order-example/5bfa8287-f605-439e-8c55-523a8450f739/PSScene/20231215_161357_05_2415_3B_AnalyticMS_metadata.xml: 100%|##########| 10.3k/10.3k [00:00&lt;00:00, 10.7MB/s]
+order-example/5bfa8287-f605-439e-8c55-523a8450f739/PSScene/20231215_161357_05_2415_3B_AnalyticMS.tif: 100%|##########| 494M/494M [00:14&lt;00:00, 35.1MB/s]
+order-example/5bfa8287-f605-439e-8c55-523a8450f739/PSScene/20231215_161357_05_2415_metadata.json: 100%|##########| 961/961 [00:00&lt;00:00, 10.5MB/s]
+order-example/5bfa8287-f605-439e-8c55-523a8450f739/PSScene/20231015_160905_18_24a9_3B_udm2.tif: 100%|##########| 5.77M/5.77M [00:00&lt;00:00, 24.4MB/s]
+order-example/5bfa8287-f605-439e-8c55-523a8450f739/PSScene/20231015_160905_18_24a9_3B_AnalyticMS_metadata.xml: 100%|##########| 10.3k/10.3k [00:00&lt;00:00, 22.7MB/s]
+order-example/5bfa8287-f605-439e-8c55-523a8450f739/PSScene/20231015_160905_18_24a9_3B_AnalyticMS.tif: 100%|##########| 586M/586M [00:16&lt;00:00, 34.5MB/s]
+order-example/5bfa8287-f605-439e-8c55-523a8450f739/PSScene/20231015_160905_18_24a9_metadata.json: 100%|##########| 969/969 [00:00&lt;00:00, 3.12MB/s]
+order-example/5bfa8287-f605-439e-8c55-523a8450f739/PSScene/20230615_164415_25_248e_3B_udm2.tif: 100%|##########| 4.29M/4.29M [00:00&lt;00:00, 36.4MB/s]
+order-example/5bfa8287-f605-439e-8c55-523a8450f739/PSScene/20230615_164415_25_248e_3B_AnalyticMS_metadata.xml: 100%|##########| 10.3k/10.3k [00:00&lt;00:00, 10.3MB/s]
+order-example/5bfa8287-f605-439e-8c55-523a8450f739/PSScene/20230615_164415_25_248e_3B_AnalyticMS.tif: 100%|##########| 584M/584M [00:16&lt;00:00, 34.8MB/s]
+order-example/5bfa8287-f605-439e-8c55-523a8450f739/PSScene/20230615_164415_25_248e_metadata.json: 100%|##########| 969/969 [00:00&lt;00:00, 3.23MB/s]
+order-example/5bfa8287-f605-439e-8c55-523a8450f739/PSScene/20230815_160845_66_24a7_3B_udm2.tif: 100%|##########| 4.23M/4.23M [00:00&lt;00:00, 33.8MB/s]
+order-example/5bfa8287-f605-439e-8c55-523a8450f739/PSScene/20230815_160845_66_24a7_3B_AnalyticMS_metadata.xml: 100%|##########| 10.3k/10.3k [00:00&lt;00:00, 11.8MB/s]
+order-example/5bfa8287-f605-439e-8c55-523a8450f739/PSScene/20230815_160845_66_24a7_3B_AnalyticMS.tif: 100%|##########| 612M/612M [00:17&lt;00:00, 34.4MB/s]
+order-example/5bfa8287-f605-439e-8c55-523a8450f739/PSScene/20230815_160845_66_24a7_metadata.json: 100%|##########| 970/970 [00:00&lt;00:00, 10.7MB/s]
+order-example/5bfa8287-f605-439e-8c55-523a8450f739/PSScene/20230115_160153_73_241d_3B_udm2.tif: 100%|##########| 8.20M/8.20M [00:00&lt;00:00, 37.4MB/s]
+order-example/5bfa8287-f605-439e-8c55-523a8450f739/PSScene/20230115_160153_73_241d_3B_AnalyticMS_metadata.xml: 100%|##########| 10.3k/10.3k [00:00&lt;00:00, 8.15MB/s]
+order-example/5bfa8287-f605-439e-8c55-523a8450f739/PSScene/20230115_160153_73_241d_3B_AnalyticMS.tif: 100%|##########| 564M/564M [00:16&lt;00:00, 35.2MB/s]
+order-example/5bfa8287-f605-439e-8c55-523a8450f739/PSScene/20230115_160153_73_241d_metadata.json: 100%|##########| 975/975 [00:00&lt;00:00, 11.6MB/s]
+order-example/5bfa8287-f605-439e-8c55-523a8450f739/PSScene/20230515_160646_65_24b9_3B_udm2.tif: 100%|##########| 10.9M/10.9M [00:00&lt;00:00, 36.1MB/s]
+order-example/5bfa8287-f605-439e-8c55-523a8450f739/PSScene/20230515_160646_65_24b9_3B_AnalyticMS_metadata.xml: 100%|##########| 10.3k/10.3k [00:00&lt;00:00, 26.9MB/s]
+order-example/5bfa8287-f605-439e-8c55-523a8450f739/PSScene/20230515_160646_65_24b9_3B_AnalyticMS.tif: 100%|##########| 667M/667M [00:19&lt;00:00, 34.4MB/s]
+order-example/5bfa8287-f605-439e-8c55-523a8450f739/PSScene/20230515_160646_65_24b9_metadata.json: 100%|##########| 971/971 [00:00&lt;00:00, 4.08MB/s]
+order-example/5bfa8287-f605-439e-8c55-523a8450f739/PSScene/20230615_160747_52_24ab_3B_udm2.tif: 100%|##########| 8.70M/8.70M [00:00&lt;00:00, 38.5MB/s]
+order-example/5bfa8287-f605-439e-8c55-523a8450f739/PSScene/20230615_160747_52_24ab_3B_AnalyticMS_metadata.xml: 100%|##########| 10.3k/10.3k [00:00&lt;00:00, 12.8MB/s]
+order-example/5bfa8287-f605-439e-8c55-523a8450f739/PSScene/20230615_160747_52_24ab_3B_AnalyticMS.tif: 100%|##########| 666M/666M [00:19&lt;00:00, 33.6MB/s]
+order-example/5bfa8287-f605-439e-8c55-523a8450f739/PSScene/20230615_160747_52_24ab_metadata.json: 100%|##########| 973/973 [00:00&lt;00:00, 3.58MB/s]
+order-example/5bfa8287-f605-439e-8c55-523a8450f739/PSScene/20230615_160749_84_24ab_3B_udm2.tif: 100%|##########| 7.28M/7.28M [00:00&lt;00:00, 34.8MB/s]
+order-example/5bfa8287-f605-439e-8c55-523a8450f739/PSScene/20230615_160749_84_24ab_3B_AnalyticMS_metadata.xml: 100%|##########| 10.3k/10.3k [00:00&lt;00:00, 7.93MB/s]
+order-example/5bfa8287-f605-439e-8c55-523a8450f739/PSScene/20230615_160749_84_24ab_3B_AnalyticMS.tif: 100%|##########| 658M/658M [00:18&lt;00:00, 34.7MB/s]
+order-example/5bfa8287-f605-439e-8c55-523a8450f739/PSScene/20230615_160749_84_24ab_metadata.json: 100%|##########| 972/972 [00:00&lt;00:00, 8.15MB/s]
+order-example/5bfa8287-f605-439e-8c55-523a8450f739/PSScene/20230315_160524_30_241f_3B_udm2.tif: 100%|##########| 8.40M/8.40M [00:00&lt;00:00, 35.5MB/s]
+order-example/5bfa8287-f605-439e-8c55-523a8450f739/PSScene/20230315_160524_30_241f_3B_AnalyticMS_metadata.xml: 100%|##########| 10.3k/10.3k [00:00&lt;00:00, 12.5MB/s]
+order-example/5bfa8287-f605-439e-8c55-523a8450f739/PSScene/20230315_160524_30_241f_3B_AnalyticMS.tif: 100%|##########| 546M/546M [00:15&lt;00:00, 35.1MB/s]
+order-example/5bfa8287-f605-439e-8c55-523a8450f739/PSScene/20230315_160524_30_241f_metadata.json: 100%|##########| 972/972 [00:00&lt;00:00, 4.12MB/s]
+order-example/5bfa8287-f605-439e-8c55-523a8450f739/PSScene/20230715_160842_98_24b4_3B_udm2.tif: 100%|##########| 5.34M/5.34M [00:00&lt;00:00, 32.0MB/s]
+order-example/5bfa8287-f605-439e-8c55-523a8450f739/PSScene/20230715_160842_98_24b4_3B_AnalyticMS_metadata.xml: 100%|##########| 10.3k/10.3k [00:00&lt;00:00, 3.17MB/s]
+order-example/5bfa8287-f605-439e-8c55-523a8450f739/PSScene/20230715_160842_98_24b4_3B_AnalyticMS.tif: 100%|##########| 646M/646M [00:18&lt;00:00, 34.5MB/s]
+order-example/5bfa8287-f605-439e-8c55-523a8450f739/PSScene/20230715_160842_98_24b4_metadata.json: 100%|##########| 968/968 [00:00&lt;00:00, 8.71MB/s]
+order-example/5bfa8287-f605-439e-8c55-523a8450f739/PSScene/20230915_161141_08_24bc_3B_udm2.tif: 100%|##########| 2.42M/2.42M [00:00&lt;00:00, 38.8MB/s]
+order-example/5bfa8287-f605-439e-8c55-523a8450f739/PSScene/20230915_161141_08_24bc_3B_AnalyticMS_metadata.xml: 100%|##########| 10.3k/10.3k [00:00&lt;00:00, 8.76MB/s]
+order-example/5bfa8287-f605-439e-8c55-523a8450f739/PSScene/20230915_161141_08_24bc_3B_AnalyticMS.tif: 100%|##########| 615M/615M [00:17&lt;00:00, 34.2MB/s]
+order-example/5bfa8287-f605-439e-8c55-523a8450f739/PSScene/20230915_161141_08_24bc_metadata.json: 100%|##########| 971/971 [00:00&lt;00:00, 10.2MB/s]
+order-example/5bfa8287-f605-439e-8c55-523a8450f739/PSScene/20230115_160156_05_241d_3B_udm2.tif: 100%|##########| 8.28M/8.28M [00:00&lt;00:00, 38.1MB/s]
+order-example/5bfa8287-f605-439e-8c55-523a8450f739/PSScene/20230115_160156_05_241d_3B_AnalyticMS_metadata.xml: 100%|##########| 10.3k/10.3k [00:00&lt;00:00, 22.5MB/s]
+order-example/5bfa8287-f605-439e-8c55-523a8450f739/PSScene/20230115_160156_05_241d_3B_AnalyticMS.tif: 100%|##########| 557M/557M [00:16&lt;00:00, 34.6MB/s]
+order-example/5bfa8287-f605-439e-8c55-523a8450f739/PSScene/20230115_160156_05_241d_metadata.json: 100%|##########| 970/970 [00:00&lt;00:00, 4.01MB/s]
+order-example/5bfa8287-f605-439e-8c55-523a8450f739/manifest.json: 100%|##########| 18.1k/18.1k [00:00&lt;00:00, 19.7MB/s]
+</pre></div></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+[&#39;order-example/5bfa8287-f605-439e-8c55-523a8450f739/PSScene/20231215_161357_05_2415_3B_udm2.tif&#39;,
+ &#39;order-example/5bfa8287-f605-439e-8c55-523a8450f739/PSScene/20231215_161357_05_2415_3B_AnalyticMS_metadata.xml&#39;,
+ &#39;order-example/5bfa8287-f605-439e-8c55-523a8450f739/PSScene/20231215_161357_05_2415_3B_AnalyticMS.tif&#39;,
+ &#39;order-example/5bfa8287-f605-439e-8c55-523a8450f739/PSScene/20231215_161357_05_2415_metadata.json&#39;,
+ &#39;order-example/5bfa8287-f605-439e-8c55-523a8450f739/PSScene/20231015_160905_18_24a9_3B_udm2.tif&#39;,
+ &#39;order-example/5bfa8287-f605-439e-8c55-523a8450f739/PSScene/20231015_160905_18_24a9_3B_AnalyticMS_metadata.xml&#39;,
+ &#39;order-example/5bfa8287-f605-439e-8c55-523a8450f739/PSScene/20231015_160905_18_24a9_3B_AnalyticMS.tif&#39;,
+ &#39;order-example/5bfa8287-f605-439e-8c55-523a8450f739/PSScene/20231015_160905_18_24a9_metadata.json&#39;,
+ &#39;order-example/5bfa8287-f605-439e-8c55-523a8450f739/PSScene/20230615_164415_25_248e_3B_udm2.tif&#39;,
+ &#39;order-example/5bfa8287-f605-439e-8c55-523a8450f739/PSScene/20230615_164415_25_248e_3B_AnalyticMS_metadata.xml&#39;,
+ &#39;order-example/5bfa8287-f605-439e-8c55-523a8450f739/PSScene/20230615_164415_25_248e_3B_AnalyticMS.tif&#39;,
+ &#39;order-example/5bfa8287-f605-439e-8c55-523a8450f739/PSScene/20230615_164415_25_248e_metadata.json&#39;,
+ &#39;order-example/5bfa8287-f605-439e-8c55-523a8450f739/PSScene/20230815_160845_66_24a7_3B_udm2.tif&#39;,
+ &#39;order-example/5bfa8287-f605-439e-8c55-523a8450f739/PSScene/20230815_160845_66_24a7_3B_AnalyticMS_metadata.xml&#39;,
+ &#39;order-example/5bfa8287-f605-439e-8c55-523a8450f739/PSScene/20230815_160845_66_24a7_3B_AnalyticMS.tif&#39;,
+ &#39;order-example/5bfa8287-f605-439e-8c55-523a8450f739/PSScene/20230815_160845_66_24a7_metadata.json&#39;,
+ &#39;order-example/5bfa8287-f605-439e-8c55-523a8450f739/PSScene/20230115_160153_73_241d_3B_udm2.tif&#39;,
+ &#39;order-example/5bfa8287-f605-439e-8c55-523a8450f739/PSScene/20230115_160153_73_241d_3B_AnalyticMS_metadata.xml&#39;,
+ &#39;order-example/5bfa8287-f605-439e-8c55-523a8450f739/PSScene/20230115_160153_73_241d_3B_AnalyticMS.tif&#39;,
+ &#39;order-example/5bfa8287-f605-439e-8c55-523a8450f739/PSScene/20230115_160153_73_241d_metadata.json&#39;,
+ &#39;order-example/5bfa8287-f605-439e-8c55-523a8450f739/PSScene/20230515_160646_65_24b9_3B_udm2.tif&#39;,
+ &#39;order-example/5bfa8287-f605-439e-8c55-523a8450f739/PSScene/20230515_160646_65_24b9_3B_AnalyticMS_metadata.xml&#39;,
+ &#39;order-example/5bfa8287-f605-439e-8c55-523a8450f739/PSScene/20230515_160646_65_24b9_3B_AnalyticMS.tif&#39;,
+ &#39;order-example/5bfa8287-f605-439e-8c55-523a8450f739/PSScene/20230515_160646_65_24b9_metadata.json&#39;,
+ &#39;order-example/5bfa8287-f605-439e-8c55-523a8450f739/PSScene/20230615_160747_52_24ab_3B_udm2.tif&#39;,
+ &#39;order-example/5bfa8287-f605-439e-8c55-523a8450f739/PSScene/20230615_160747_52_24ab_3B_AnalyticMS_metadata.xml&#39;,
+ &#39;order-example/5bfa8287-f605-439e-8c55-523a8450f739/PSScene/20230615_160747_52_24ab_3B_AnalyticMS.tif&#39;,
+ &#39;order-example/5bfa8287-f605-439e-8c55-523a8450f739/PSScene/20230615_160747_52_24ab_metadata.json&#39;,
+ &#39;order-example/5bfa8287-f605-439e-8c55-523a8450f739/PSScene/20230615_160749_84_24ab_3B_udm2.tif&#39;,
+ &#39;order-example/5bfa8287-f605-439e-8c55-523a8450f739/PSScene/20230615_160749_84_24ab_3B_AnalyticMS_metadata.xml&#39;,
+ &#39;order-example/5bfa8287-f605-439e-8c55-523a8450f739/PSScene/20230615_160749_84_24ab_3B_AnalyticMS.tif&#39;,
+ &#39;order-example/5bfa8287-f605-439e-8c55-523a8450f739/PSScene/20230615_160749_84_24ab_metadata.json&#39;,
+ &#39;order-example/5bfa8287-f605-439e-8c55-523a8450f739/PSScene/20230315_160524_30_241f_3B_udm2.tif&#39;,
+ &#39;order-example/5bfa8287-f605-439e-8c55-523a8450f739/PSScene/20230315_160524_30_241f_3B_AnalyticMS_metadata.xml&#39;,
+ &#39;order-example/5bfa8287-f605-439e-8c55-523a8450f739/PSScene/20230315_160524_30_241f_3B_AnalyticMS.tif&#39;,
+ &#39;order-example/5bfa8287-f605-439e-8c55-523a8450f739/PSScene/20230315_160524_30_241f_metadata.json&#39;,
+ &#39;order-example/5bfa8287-f605-439e-8c55-523a8450f739/PSScene/20230715_160842_98_24b4_3B_udm2.tif&#39;,
+ &#39;order-example/5bfa8287-f605-439e-8c55-523a8450f739/PSScene/20230715_160842_98_24b4_3B_AnalyticMS_metadata.xml&#39;,
+ &#39;order-example/5bfa8287-f605-439e-8c55-523a8450f739/PSScene/20230715_160842_98_24b4_3B_AnalyticMS.tif&#39;,
+ &#39;order-example/5bfa8287-f605-439e-8c55-523a8450f739/PSScene/20230715_160842_98_24b4_metadata.json&#39;,
+ &#39;order-example/5bfa8287-f605-439e-8c55-523a8450f739/PSScene/20230915_161141_08_24bc_3B_udm2.tif&#39;,
+ &#39;order-example/5bfa8287-f605-439e-8c55-523a8450f739/PSScene/20230915_161141_08_24bc_3B_AnalyticMS_metadata.xml&#39;,
+ &#39;order-example/5bfa8287-f605-439e-8c55-523a8450f739/PSScene/20230915_161141_08_24bc_3B_AnalyticMS.tif&#39;,
+ &#39;order-example/5bfa8287-f605-439e-8c55-523a8450f739/PSScene/20230915_161141_08_24bc_metadata.json&#39;,
+ &#39;order-example/5bfa8287-f605-439e-8c55-523a8450f739/PSScene/20230115_160156_05_241d_3B_udm2.tif&#39;,
+ &#39;order-example/5bfa8287-f605-439e-8c55-523a8450f739/PSScene/20230115_160156_05_241d_3B_AnalyticMS_metadata.xml&#39;,
+ &#39;order-example/5bfa8287-f605-439e-8c55-523a8450f739/PSScene/20230115_160156_05_241d_3B_AnalyticMS.tif&#39;,
+ &#39;order-example/5bfa8287-f605-439e-8c55-523a8450f739/PSScene/20230115_160156_05_241d_metadata.json&#39;,
+ &#39;order-example/5bfa8287-f605-439e-8c55-523a8450f739/manifest.json&#39;]
+</pre></div></div>
+</div>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="basic-example.html" class="btn btn-neutral float-left" title="Searching for Scenes by geojson location and date range." accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, Center for Advanced Spatial Technologies.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

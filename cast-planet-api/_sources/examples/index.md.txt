@@ -2,4 +2,5 @@
 ```{toctree}
 :maxdepth: 1
 basic-example.ipynb
+order-from-search-example.ipynb
 ```
